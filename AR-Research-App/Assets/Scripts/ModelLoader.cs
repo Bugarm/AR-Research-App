@@ -39,6 +39,8 @@ public class ModelLoader : MonoBehaviour
 
     void Start()
     {
+        Input.gyro.enabled = true; // Must enable it first
+
         if (classesAsset != null)
         {
             classNames = classesAsset.text
@@ -74,6 +76,13 @@ public class ModelLoader : MonoBehaviour
             nextRunTime = Time.unscaledTime + runInterval;
             RunAI();
         }
+    }
+
+    float GetTiltAngle()
+    {
+        // Euler angles from the gyroscope
+        Vector3 attitude = Input.gyro.attitude.eulerAngles;
+        return attitude.x; // Pitch (up/down tilt) — most relevant for aiming at an ingredient
     }
     private void FormatForYOLO(Texture source, RenderTexture dest)
     {
@@ -210,6 +219,16 @@ public class ModelLoader : MonoBehaviour
         
         GlobalData.Confidence = bestDet.finalConf;
         GlobalData.CurrentIngredient = detectedIngredient;
+
+        if(Application.platform == RuntimePlatform.Android ||
+           Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            GlobalData.AngleOfScan = GetTiltAngle();
+        }
+        else
+        {
+            GlobalData.AngleOfScan = 0f; // Default to 0 on non-mobile platforms
+        }
     }
 
     private void OnDisable()

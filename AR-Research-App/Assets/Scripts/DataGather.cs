@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEditor.Overlays;
 using UnityEngine;
 
 [System.Serializable]
 public class ScanData
 {
+    public string inControlledEnvironment;
+    public string expectedIngredient;
     public string ingredient;
     public float distance;
+    public float angleOfScan;
     public float confidence;
-    public bool isAccurate;
 }
 
 [System.Serializable]
@@ -27,24 +30,35 @@ public class DataGather : MonoBehaviour
 
     Coroutine dataGatherCoroutine;
 
+    string inControlledEnv = "No";
+
     private void Start()
     {
-        Debug.Log(Application.persistentDataPath);
+        //Debug.Log(Application.persistentDataPath);
+
+        if(Application.isEditor)
+        {
+            inControlledEnv = "Yes";
+        }
     }
 
     private void GatherData()
     {
         // Example of gathering data from GlobalData and printing it to the console
+        string expectedIngredient = GlobalData.ExpectedIngredient;
         string ingredient = GlobalData.CurrentIngredient;
         float distance = GlobalData.CurrentDistance;
         float confidence = GlobalData.Confidence;
+        float angleOfScan = GlobalData.AngleOfScan;
 
         scanDataList.Add(new ScanData
         {
+            inControlledEnvironment = inControlledEnv,
+            expectedIngredient = expectedIngredient,
             ingredient = ingredient,
             distance = distance,
+            angleOfScan = angleOfScan,
             confidence = confidence,
-            isAccurate = confidence > 0.8f // Example threshold for accuracy
         });
     }
 
@@ -82,11 +96,23 @@ public class DataGather : MonoBehaviour
         File.WriteAllText(path, json);
     }
 
+    public void ClearData()
+    {
+        scanDataList.Clear();
+        print("Data cleared.");
+    }
+
+    public void ExpectedIngredientInput(TMP_InputField inputField)
+    { 
+        GlobalData.ExpectedIngredient = inputField.text; 
+        print($"Expected Ingredient set to: {GlobalData.ExpectedIngredient}");
+    }
+
     private void PrintData()
     {
         foreach (var data in scanDataList)
         {
-            print($"Ingredient: {data.ingredient}, Distance: {data.distance}, Confidence: {data.confidence}, Accurate: {data.isAccurate}");
+            print($"Ingredient: {data.ingredient}, Distance: {data.distance}, Confidence: {data.confidence}, Angle of Scan: {data.angleOfScan}");
         }
     }
 }

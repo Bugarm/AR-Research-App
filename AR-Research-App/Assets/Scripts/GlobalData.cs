@@ -25,4 +25,20 @@ public abstract class GlobalData
         get { return confidence; }
         set { confidence = value; }
     }
+
+    private static float angleOfScan = 0f;
+
+    public static float AngleOfScan
+    {
+        get { return angleOfScan; }
+        set { angleOfScan = value; }
+    }
+
+    private static string expectedIngredient = "";
+
+    public static string ExpectedIngredient
+    {
+        get { return expectedIngredient; }
+        set { expectedIngredient = value; }
+    }
 }
