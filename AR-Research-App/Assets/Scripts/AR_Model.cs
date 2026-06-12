@@ -1,0 +1,64 @@
+using TMPro;
+using UnityEngine;
+using UnityEngine.XR.ARFoundation;
+
+public class AR_Model : MonoBehaviour
+{
+    [SerializeField] private GameObject modelPrefab; 
+    private ARTrackedImageManager raycastManager;
+    private GameObject spawnedModel;
+    [SerializeField] private TMP_Text distanceText;
+
+    private void OnEnable()
+    {
+        raycastManager = GetComponent<ARTrackedImageManager>();
+        raycastManager.trackablesChanged.AddListener(OnImageChanged);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        CalculateDistance();
+    }
+
+    private void CalculateDistance()
+    {
+        if (spawnedModel != null)
+        {
+            float distance = Vector3.Distance(Camera.main.transform.position, spawnedModel.transform.position);
+            distanceText.text = $"Distance: {distance:F2} meters";
+            GlobalData.CurrentDistance = distance; // Update the global distance variable
+        }
+    }
+
+    public void OnImageChanged(ARTrackablesChangedEventArgs<ARTrackedImage> eventArgs)
+    {
+        foreach (var trackedImage in eventArgs.added)
+        {
+            if (spawnedModel == null)
+            {
+                spawnedModel = Instantiate(modelPrefab, trackedImage.transform);
+                spawnedModel.transform.localPosition = Vector3.zero;
+                spawnedModel.transform.localRotation = Quaternion.identity;
+                spawnedModel.transform.localScale = Vector3.one * 0.1f; // Adjust scale as needed
+                print("Model instantiated at position: " + trackedImage.transform.position);
+            }
+        }
+        foreach (var trackedImage in eventArgs.updated)
+        {
+            if (spawnedModel != null)
+            {
+                spawnedModel.transform.position = trackedImage.transform.position;
+                spawnedModel.transform.rotation = trackedImage.transform.rotation;
+            }
+        }
+        foreach (var trackedImage in eventArgs.removed)
+        {
+            if (spawnedModel != null)
+            {
+                Destroy(spawnedModel);
+                spawnedModel = null;
+            }
+        }
+    }
+}
