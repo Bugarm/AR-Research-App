@@ -210,7 +210,6 @@ public class ModelLoader : MonoBehaviour
         
         GlobalData.Confidence = bestDet.finalConf;
         GlobalData.CurrentIngredient = detectedIngredient;
-        outputTensor.Dispose();
     }
 
     private void OnDisable()

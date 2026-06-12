@@ -4,33 +4,32 @@ using System.IO;
 using UnityEditor.Overlays;
 using UnityEngine;
 
+[System.Serializable]
+public class ScanData
+{
+    public string ingredient;
+    public float distance;
+    public float confidence;
+    public bool isAccurate;
+}
+
+[System.Serializable]
+public class WrappingClass
+{
+    public List<ScanData> Inventory;
+}
+
 public class DataGather : MonoBehaviour
 {
-    [System.Serializable]
-    public class ScanData
-    {
-        public string ingredient;
-        public float distance;
-        public float confidence;
-        public bool isAccurate;
-    }
-
     [SerializeField] private int dataGatherCount = 10; // Number of times to gather data
 
     List<ScanData> scanDataList = new List<ScanData>();
 
     Coroutine dataGatherCoroutine;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log(Application.persistentDataPath);
     }
 
     private void GatherData()
@@ -76,8 +75,10 @@ public class DataGather : MonoBehaviour
     private void WriteData()
     {
         print("writing");
-        var path = $"{Application.persistentDataPath}/data.json";
-        var json = JsonUtility.ToJson(scanDataList);
+        var path = $"{Application.persistentDataPath}/IngredientData.json";
+        WrappingClass wrappingClass = new WrappingClass { Inventory = scanDataList };
+        var json = JsonUtility.ToJson(wrappingClass, true); 
+        
         File.WriteAllText(path, json);
     }
 

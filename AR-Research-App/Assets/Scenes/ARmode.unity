@@ -1705,7 +1705,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa57ebc18ca65ef4b9d91a18a8db74a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DataGather
-  dataGatherCount: 10
+  dataGatherCount: 2
 --- !u!1 &1141008455
 GameObject:
   m_ObjectHideFlags: 0
