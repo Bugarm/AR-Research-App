@@ -34,11 +34,27 @@ public abstract class GlobalData
         set { angleOfScan = value; }
     }
 
+    private static Vector3 angleOfImage = Vector3.zero;
+
+    public static Vector3 AngleOfImage
+    {
+        get { return angleOfImage; }
+        set { angleOfImage = value; }
+    }
+
     private static string expectedIngredient = "";
 
     public static string ExpectedIngredient
     {
         get { return expectedIngredient; }
         set { expectedIngredient = value; }
+    }
+
+    private static string imageLink = "not applicable";
+
+    public static string ImageLink
+    {
+        get { return imageLink; }
+        set { imageLink = value; }
     }
 }

@@ -206,6 +206,8 @@ public class ModelLoader : MonoBehaviour
         if (allDetections.Count == 0)
         {
             ingredientLabel.text = "No ingredient detected";
+            GlobalData.CurrentIngredient = "No ingredient detected";
+            GlobalData.Confidence = 0f;
             return;
         }
 

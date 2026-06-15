@@ -9,10 +9,12 @@ using UnityEngine;
 public class ScanData
 {
     public string inControlledEnvironment;
+    public string imageLink;
     public string expectedIngredient;
-    public string ingredient;
+    public string scannedIngredient;
     public float distance;
     public float angleOfScan;
+    public Vector3 angleOfImage;
     public float confidence;
 }
 
@@ -32,6 +34,8 @@ public class DataGather : MonoBehaviour
 
     string inControlledEnv = "No";
 
+    int dataCount = 0;
+
     private void Start()
     {
         //Debug.Log(Application.persistentDataPath);
@@ -45,27 +49,37 @@ public class DataGather : MonoBehaviour
     private void GatherData()
     {
         // Example of gathering data from GlobalData and printing it to the console
+        string imageLink = GlobalData.ImageLink;
         string expectedIngredient = GlobalData.ExpectedIngredient;
         string ingredient = GlobalData.CurrentIngredient;
         float distance = GlobalData.CurrentDistance;
         float confidence = GlobalData.Confidence;
         float angleOfScan = GlobalData.AngleOfScan;
+        Vector3 angleOfImage = Vector3.zero;
+        if (Application.isEditor)
+        {
+            angleOfImage = GlobalData.AngleOfImage;
+        }
 
         scanDataList.Add(new ScanData
         {
+            imageLink = imageLink,
             inControlledEnvironment = inControlledEnv,
             expectedIngredient = expectedIngredient,
-            ingredient = ingredient,
+            scannedIngredient = ingredient,
             distance = distance,
             angleOfScan = angleOfScan,
+            angleOfImage = angleOfImage,
             confidence = confidence,
         });
     }
 
     public void StartDataGathering()
     {
+
         if(dataGatherCoroutine == null)
         {
+            ClearData(); // Clear previous data before starting new gathering
             dataGatherCoroutine = StartCoroutine(DelayData());
         }
     }
@@ -81,7 +95,7 @@ public class DataGather : MonoBehaviour
             GatherData();
             i++;
         }
-        PrintData();
+        //PrintData();
         WriteData();
         dataGatherCoroutine = null; // Reset the coroutine reference after completion
     }
@@ -89,11 +103,12 @@ public class DataGather : MonoBehaviour
     private void WriteData()
     {
         print("writing");
-        var path = $"{Application.persistentDataPath}/IngredientData.json";
+        var path = $"{Application.persistentDataPath}/IngredientData_{dataCount}.json";
         WrappingClass wrappingClass = new WrappingClass { Inventory = scanDataList };
         var json = JsonUtility.ToJson(wrappingClass, true); 
         
         File.WriteAllText(path, json);
+        dataCount++;
     }
 
     public void ClearData()
@@ -112,7 +127,7 @@ public class DataGather : MonoBehaviour
     {
         foreach (var data in scanDataList)
         {
-            print($"Ingredient: {data.ingredient}, Distance: {data.distance}, Confidence: {data.confidence}, Angle of Scan: {data.angleOfScan}");
+            print($"Expected Ingredient: {data.expectedIngredient}, Scanned Ingredient: {data.scannedIngredient}, Distance: {data.distance}, Confidence: {data.confidence}, Angle of Scan: {data.angleOfScan}");
         }
     }
 }

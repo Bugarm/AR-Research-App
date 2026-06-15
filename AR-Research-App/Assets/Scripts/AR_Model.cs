@@ -1,6 +1,8 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.Simulation;
 
 public class AR_Model : MonoBehaviour
 {
@@ -9,16 +11,29 @@ public class AR_Model : MonoBehaviour
     private GameObject spawnedModel;
     [SerializeField] private TMP_Text distanceText;
 
+    private GameObject simImage;
+
     private void OnEnable()
     {
         raycastManager = GetComponent<ARTrackedImageManager>();
         raycastManager.trackablesChanged.AddListener(OnImageChanged);
     }
 
+    private void Start()
+    {
+        StartCoroutine(DelayCalculateDistance());
+    }
+
     // Update is called once per frame
     void Update()
     {
         CalculateDistance();
+    }
+
+    IEnumerator DelayCalculateDistance()
+    {
+        yield return new WaitForSeconds(0.01f); // Adjust the delay as needed
+        simImage = GameObject.FindGameObjectWithTag("Image");
     }
 
     private void CalculateDistance()
@@ -28,6 +43,17 @@ public class AR_Model : MonoBehaviour
             float distance = Vector3.Distance(Camera.main.transform.position, spawnedModel.transform.position);
             distanceText.text = $"Distance: {distance:F2} meters";
             GlobalData.CurrentDistance = distance; // Update the global distance variable
+            if (Application.platform != RuntimePlatform.Android &&
+            Application.platform != RuntimePlatform.IPhonePlayer)
+            {
+                GlobalData.AngleOfImage = spawnedModel.transform.eulerAngles; // Update the global angle variable
+                if (simImage != null)
+                { 
+                    string name = simImage.GetComponent<SimulatedTrackedImage>().texture.name;
+
+                    GlobalData.ImageLink = name; // Update the global image link variable
+                }
+            }
         }
     }
 
