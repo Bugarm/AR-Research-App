@@ -176,13 +176,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Key Ingredients Checklist:\r\n\r\nCrust: Double crust (homemade or store-bought).\r\nApples:
-    3 pounds of tart/firm apples (Granny Smith, Honeycrisp, or a mix).\n\r\nSweetener:\r\ncup
-    brown sugar &\r\ncup white sugar (adjust to taste).\r\n\nThickener: 3\u20134
-    tablespoons all-purpose flour or tapioca starch.\r\n\nSpice: 1\u20132 teaspoons
-    ground cinnamon,\r\nteaspoon nutmeg, optional\nteaspoon ginger.\r\n    \nFlavor/Fat:
-    1 tablespoon lemon juice, 2 tablespoons butter (cubed).\r\n\nFinishing: 1 egg
-    + 1 tablespoon water (for egg wash). "
+  m_text: "Key Ingredients Checklist for Chicken and Broccoli Meal:\r\n\r\nChicken:
+    You can use chicken breasts or thighs for this stir-fry, but chicken thighs tend
+    to be more forgiving, as they\u2019re slightly higher in fat. The fat also helps
+    keep the meat nice and moist.\r\n\nBroccoli: I recommend using fresh broccoli
+    here, but you can use frozen in a pinch. \n\nGarlic: I\u2019m a big garlic fan,
+    so I use 3 cloves here, but feel free to taste and adjust based on your preferences."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
@@ -339,7 +338,6 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -561,7 +559,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8478562381375844705, guid: 215687feeab0b7445b4a1cd86c82c2e1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bade4216bf16c6e44a06287526ed72d1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -766,7 +764,6 @@ MonoBehaviour:
   m_RepeatRate: 0.1
   m_TrackedDeviceDragThresholdMultiplier: 2
   m_TrackedScrollDeltaMultiplier: 5
-  m_NonTrackedScrollDeltaMultiplier: 6
   m_BypassUIToolkitEvents: 0
   m_ActiveInputMode: 0
   m_EnableXRInput: 1
@@ -1187,6 +1184,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bf5591b38dde448bdf9b0799eb75d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonManager
+  slideDistance: 100
+  slideDuration: 0.5
+  rectTransform: {fileID: 0}
 --- !u!4 &1623469836
 Transform:
   m_ObjectHideFlags: 0
@@ -1364,7 +1364,7 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1877144974}
   m_Enabled: 1
-  serializedVersion: 13
+  serializedVersion: 12
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
@@ -1416,7 +1416,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShapeRadius: 0.025
+  m_ShadowRadius: 0
   m_ShadowAngle: 0
   m_LightUnit: 1
   m_LuxAtDistance: 1
